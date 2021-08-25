@@ -6,3 +6,5 @@ MBST - Using Camerini's algorithim to construct an mbst
 
 Palin - Creating minimum palindrome cuts of a string
 
+SAIS - Sorting a string using SAIS 
+
