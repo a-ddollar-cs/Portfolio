@@ -4,3 +4,5 @@ doublylinkedlist - Implementation of a Doubly linked list for use with a created
 
 MBST - Using Camerini's algorithim to construct an mbst
 
+Palin - Creating minimum palindrome cuts of a string
+
