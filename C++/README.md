@@ -8,3 +8,5 @@ Palin - Creating minimum palindrome cuts of a string
 
 SAIS - Sorting a string using SAIS 
 
+Library Project - An object-oriented analysis, design, and implementation of "The Gavelton Library"
+
