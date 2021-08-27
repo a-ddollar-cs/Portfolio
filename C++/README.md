@@ -13,3 +13,7 @@ Library Project - An object-oriented analysis, design, and implementation of "Th
 Stamping Press - A mock "stamping press" machine on the command line
 
 String Substitution - A string substitution using little to no heap space
+
+Analysis of Sorts - Analyzing and compasisoon of sorting algorithims
+
+
