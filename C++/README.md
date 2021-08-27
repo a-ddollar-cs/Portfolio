@@ -10,3 +10,4 @@ SAIS - Sorting a string using SAIS
 
 Library Project - An object-oriented analysis, design, and implementation of "The Gavelton Library"
 
+Stamping Press - A mock "stamping press" machine on the command line
