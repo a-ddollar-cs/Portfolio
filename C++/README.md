@@ -18,4 +18,4 @@ Analysis of Sorts - Analyzing and compasisoon of sorting algorithims
 
 Hash Table - Implementation of a Hash Table
 
-
+Min Priority queue - Implementation of a Min Priotity Queue
