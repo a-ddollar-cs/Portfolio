@@ -16,4 +16,6 @@ String Substitution - A string substitution using little to no heap space
 
 Analysis of Sorts - Analyzing and compasisoon of sorting algorithims
 
+Hash Table - Implementation of a Hash Table
+
 
