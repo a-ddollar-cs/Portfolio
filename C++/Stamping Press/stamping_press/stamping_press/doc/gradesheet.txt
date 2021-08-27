@@ -1,0 +1,17 @@
+Stamping Press Rubric
+10	Program compiles successfully.
+
+10	Program runs correctly as specified in the requirements
+
+10	Memory allocated with new is released with delete.
+
+20      stampbuf correctly handles different sized buffers
+
+10	A space appears on the plate whenever an invalid character is sent to the output stream.
+
+10	Any output that would run beyond the end of the plate is ignored
+
+10	The manipulators row(n) and endrow flush the buffer and change the row and column as per the requirements.
+
+20	The buffer is properly flushed upon a sync or overflow.
+
