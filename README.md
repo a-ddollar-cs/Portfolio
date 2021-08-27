@@ -7,7 +7,7 @@ A collection of my projects and code from Chico State, as well as design work to
 
 ## [C/C++](https://github.com/a-ddollar-cs/Portfolio/tree/main/C%2B%2B)
 
-## Python
+## [Python](https://github.com/a-ddollar-cs/Portfolio/tree/main/Python)
 
 ## Bash
 
