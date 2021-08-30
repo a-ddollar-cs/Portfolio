@@ -9,16 +9,6 @@ A collection of my projects and code from Chico State, as well as design work to
 
 ## [Python](https://github.com/a-ddollar-cs/Portfolio/tree/main/Python)
 
-## Bash
-
-## CSS (Web App)
-
-## Dart/Flutter (Mobile App)
-
-## R
-
-## Miscellaneous, non language specific projects
-
-## Design Work
+Additional projects include projects with security using NetCat, Ghidra, Zenmap, etc, as well as a Mobile Application done in Flutter, with the repo available upon request.
 
 
