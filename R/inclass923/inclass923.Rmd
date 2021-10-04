@@ -1,0 +1,64 @@
+---
+title: "inClass923"
+author: "Austin Dollar, Brandon Trahms"
+date: "9/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+```{r q1}
+
+diamondsQ1<- select(diamonds, -c(depth, table, x, y,z))
+
+diamondsQ1
+
+```
+
+
+```{r Q2}
+
+Idaho<-data.frame(read_csv("2020Idaho.csv"))
+
+NewIda<-mutate(Idaho, AvgDaysHunted = Days/Hunters)
+
+colnames(NewIda)[colnames(NewIda) %in% c("X.4.Pts", "X.5.Pts")] <- c("Percent_bigger_4Pts", "Percent_bigger_5Pts")
+
+ggplot(NewIda, aes(AvgDaysHunted, Success.))+
+  geom_point()+
+  facet_wrap(~Unit)
+
+
+```
+
+
+```{r Q3}
+
+
+```
+
+
+```{r Q4}
+
+
+```
+
+
+```{r Q5}
+
+
+```
+
+```{r Q6}
+
+
+```
+
+```{r Q7}
+
+
+```

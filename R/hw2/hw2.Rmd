@@ -1,0 +1,216 @@
+---
+title: "Assignment 2"
+author: "Austin Dollar"
+date: "9/6/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Q1 
+
+Suppose you have a vector of indices of the months from 2020 to
+2021 (let’s call it time), and that you have two other vectors of
+indices summer2020 and summer2021, which store the indices of
+the summer months from their respective years. Use set operations
+to find the indices of the non-summer months.
+
+
+```{r Q1}
+
+time <- 1:24
+summer2020 <- c(7, 8, 9)
+summer2021 <- c(19, 20, 21) 
+summer <- union(summer2020, summer2021)
+nonsummer <- setdiff(time, summer)
+
+```
+
+The indices of non summer months are `r nonsummer`
+
+## Q2
+
+At a county fair carnival game, there are 25 balloons on a board, 8
+of which are yellow, 10 red, and 7 green. Given that the first
+balloon hit is red, what is the probability that the next balloon hit
+will also be red? Hence, find P(2red |1red ). Additionally, what is
+the combined probability of both hit balloons being red?
+
+
+```{r Q2}
+
+# P(first_red) = 10/25
+
+# P(first_red | second_red) = 9/24
+#Probability that second balloon is red
+
+# P(first_red & second-red) = (10*9)/(25*24) = 0.15
+# Probability that they are both red
+
+
+```
+
+
+## Q3
+
+Roll a six-sided die once. Let E1 = {5, 6} and E2 = {6}. Are E1
+and E2 independent?
+
+
+```{r, Q3}
+
+# E1 = {5,6}   
+# E2 = {6}   
+
+p.E2 = 1/6
+p.E1 = 2/6
+
+p.E1andE2 = 1/6
+p.E1andE2 ==  p.E1*p.E2
+
+```
+
+E1 and E2 are not independent because, as shown above, the product of the probabilities is not the same as their intersection.
+
+
+## Q4 
+
+Roll a six-sided die once. Let E1 = {2, 3} and E2 = {2, 4, 6}. Are
+E1 and E2 independent?
+
+
+```{r, Q4}
+
+#E1 = {2,3}
+#E2 = {2,4,6}
+
+pp.E1 = 2/6
+pp.E2 = 3/6
+
+pp.E1andE2 = 1/6
+pp.E1andE2 == pp.E1*pp.E2
+
+```
+
+E1 and E2 are independent because, as shown above, the product of the probabilities is the same as their intersection.
+
+
+## Q5 
+
+The three components of the parallel system, D, E, and F, will
+function with probabilities pD = 0.92, pE = 0.88, and pF = 0.85,
+independently of each other. What is the probability the parallel
+system will function?
+
+
+```{r, Q5}
+
+pD <- 0.92
+pE <- 0.88
+pF <- 0.85
+
+pDf <- 1 - pD
+pEf <- 1 - pE
+pFf <- 1 - pF
+
+pFail <- pDf*pEf*pFf
+pFunction = 1 - pFail
+
+```
+
+The probability the system will function is `r pFunction`
+
+## Q6
+
+Consider the data set arules::Groceries. Also import the CSV
+version from the listed URL (after removing the space).
+
+
+```{r, 6Question}
+
+suppressMessages(library(arules))
+
+data(Groceries)
+
+arGroceries <- apriori(Groceries,
+          parameter=list(supp=0.001, conf=0.8))
+
+inspect(head(arGroceries, n=4))
+
+# Import from CSV version from URL
+url <- "https://raw.githubusercontent.com/roualdes/data/master/groceries.csv"
+
+groceries <- read.csv(url)
+
+```
+
+
+Calculate the support, confidence, and lift for row 3 and row 4
+using the rules developed in the Lecture 02 notes. Use mean(), &,
+and | to do so, and use complete sentences to interpret the
+numbers you get. Check your work with arGroceries.
+
+
+```{r, Q6}
+
+p.A <- mean(groceries$whole.milk)  #same for both rows
+
+# row 3 
+p.B <- mean(groceries$yogurt & groceries$cereals)
+
+row3.supp = mean(groceries$whole.milk & groceries$yogurt & groceries$cereals)
+
+row3.conf = row3.supp/p.B
+
+row3.lift = row3.conf/p.A
+
+
+#row4
+p.B <- mean(groceries$butter & groceries$jam)
+
+row4.supp = mean(groceries$whole.milk & groceries$butter & groceries$jam)
+
+row4.conf = row4.supp/p.B
+
+row4.lift = row4.conf/p.A
+
+```
+
+The Support value that was found for row 3 is `r row3.supp``, and matches with the sample code. 
+
+The calculated confidence value for row 3 is `r row3.conf`` and matches our sample value.
+
+lift was calculated for row 3 at `r row3.lift`` and matches what the answer key says. 
+
+
+The Support value that was found for row 4 is `r row4.supp``, and matches with the sample code. 
+
+The calculated confidence value for row 4 is `r row4.conf`` and matches our sample value.
+
+lift was calculated for row 4 at `r row4.lift`` and matches what the answer key says. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

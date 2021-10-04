@@ -1,0 +1,242 @@
+---
+title: "Assignment 2"
+author: "Austin Dollar"
+date: "9/21/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Question 1
+
+What is an ordinal variable? Identify the ordinal variables in the diamonds data set and
+specify their rankings.
+
+
+An ordinal variable is a type of categorical variable, specifically such that they are ordered.
+
+As displayed in the summary call 
+
+```{r Q1}
+diamonds
+summary(diamonds)
+
+```
+
+As shown above with simply calling the diamonds dataset, it tells us which variables are ordinal. These variables include cut, color, and clarity. Then, we call the summary(diamonds) function, which gives us detailed information on these variables, including their rankings. For cut, the ranking, is Fair, Good, Very Good, Premium, and finally Ideal. For Color, the order of ranking is as follows: D,E,F,,H,I,J. For clarity, the order is: SI1,VS2,SI2,VS1,VVS2,VVS1, and Other.
+
+## Question 2
+
+Generate a scatterplot with carat on the x-axis and price on the y-axis. Set alpha, a
+parameter governing opaqueness, for these point to be 0.2. Do you notice any interesting patterns
+with respect to the distribution of carats?
+
+
+```{r Q2}
+
+diamondframe <- data.frame(diamonds)
+
+ggplot(diamondframe, aes(carat, price))+
+  geom_point(alpha=0.2)
+
+
+```
+
+
+I noticed how by setting opaqueness to a smaller variable, we can tell where there is overlap and a higher concentration of variables. We can see that there is a high concentration on each low end of the carat value, with fewer values as you travel left in between carats, meaning that most are rated at a whole number for the carat.
+
+## Question 3
+
+Generate a new figure with the same information as in the previous problem. Add to this
+figure a color aesthetic for clarity along with smoothed lines, also colored according to clarity. Do
+not include confidence intervals for these lines. What method was used to generate these lines?
+Give the full name, not just an acronym.
+
+
+```{r Q3}
+
+ggplot(diamondframe, aes(carat, price, color=clarity))+
+  geom_smooth(alpha=0.2)
+
+```
+
+Above is the graph as described in the documentation. The method used to generate these lines was the generalized additive model.
+
+## Question 4
+
+Create a histogram of diamond prices. Include a red vertical dashed line at the mean
+(the vline geometric object and this link might be helpful). Set the binwidth parameter to 100.
+Do you notice a slight bump right below 5000? Next set binwidth to 2000. Try a binwidth of 1.
+Why might binwidth or bins be important parameters when creating histograms?
+
+
+```{r Q4}
+
+
+
+#binwidth 100
+ggplot(diamonds, aes(price))+
+  geom_histogram(binwidth = 100)+
+  geom_vline(xintercept = mean(diamonds$price), color = 'red')
+
+
+#binwidth 2000
+ggplot(diamonds, aes(price))+
+  geom_histogram(binwidth = 2000)+
+  geom_vline(xintercept = mean(diamonds$price), color = 'red')
+
+#binwidth 1
+ggplot(diamonds, aes(price))+
+  geom_histogram(binwidth = 1)+
+  geom_vline(xintercept = mean(diamonds$price), color = 'red')
+
+  
+
+```
+
+As seen above, we can see a slight dip in the graph just before the 5000mark, which is important data. However, this is only visible with binwidth set to 100. Having a binwidth too large or too small, as evidenced by the histograms with binwidth 2000 and 1, respectively, have the possibility of making the data not readable, as you cannot see that dip when viewing the histogram at those settings.
+
+
+## Question 5
+
+Create a bar chart of diamond cuts. Add a color aesthetic for diamond color. Does this
+improve the visualization at all? Try adding a fill aesthetic for diamond color instead. Is this any
+better? Finally, set the position parameter to "dodge". How does the figure change?
+
+
+```{r Q5}
+#color
+ggplot(diamonds, aes(cut, color=color))+
+  geom_bar()
+
+#fill
+ggplot(diamonds, aes(cut, fill=color))+
+  geom_bar()
+
+#dodge
+ggplot(diamonds, aes(cut, fill=color))+
+  geom_bar(position = 'dodge')
+
+
+```
+
+As seen above, setting color to color kind of shows us what we would want, but it really is not very readable, as the colors are just lines in the bar. Fill, however, separates the bars into distinct sections, which gives the chart much more readability and is better understood. Likewise, dodge further increases this understanding by offsetting the bars and their respective colors, so that we can see the counts sorted by both cut and color.
+
+
+
+
+## Question 6
+
+Make a violin plot comparing diamond color and price. Add a boxplot on top of this
+figure comparing the same variables. Play with the boxplot width parameter so that the boxplots
+fit inside the violin plots.
+
+
+```{r Q6}
+
+ggplot(diamonds, aes(color, price))+
+  geom_violin()+
+  geom_boxplot(width = 0.1)
+
+```
+
+When creating the violin and boxplots, I had to shrink the width of the boxplots to a scale of 1/10, or .1, to get them to fit in the violins
+
+
+
+## Question 7
+
+Write R code to reproduce the figure below. The density geometric object might be
+useful.
+
+[Figure is in pdf documentation of lab assignment]
+
+
+```{r Q7}
+
+ggplot(diamonds, aes(price, fill = cut))+
+  geom_density(alpha = .2)+
+  facet_wrap(~color, nrow = 2)
+
+```
+
+
+## Question 8
+
+Import the data from billboard.csv as a tibble and make it tidy. Remember that, in
+tidy data, each variable has its own column, each observation has its own row, and each value
+has its own cell. Rename the artist.inverted column to artist and the track column to
+song. Make a tibble containing the columns year, artist, song, genre, and time along with
+information related to week on the chart and rank.
+
+
+```{r Q8}
+
+billboard<-read_csv("billboard.csv")
+
+#pivot to create the rank variable
+
+tidy_board<-billboard %>%
+  pivot_longer(
+    x1st.week:x76th.week,
+    names_to = "week",
+    values_to = "rank"
+  )
+
+#rename variables artist, track
+
+tidy_board<-setNames(tidy_board, replace(names(tidy_board), names(tidy_board) == 'artist.inverted', 'artist'))
+
+tidy_board<-setNames(tidy_board, replace(names(tidy_board), names(tidy_board) == 'track', 'song'))
+
+tidy_board
+
+
+```
+
+As seen above, all the necessary changes were made to billboard, and were put into a dataframe called "tidy_board" 
+
+## Question 9
+
+Create a bar chart of song genres. Create a separate scatterplot with rank on the x-axis,
+time on the y-axis, and a color aesthetic based on genre. What causes the horizontal lines of
+points in this second figure?
+
+
+```{r Q9}
+#barchart
+ggplot(tidy_board, aes(genre))+
+  geom_bar()
+
+#scatterplot
+ggplot(tidy_board, aes(rank, time, color=genre))+
+  geom_point()
+
+```
+
+The cause of the massive amount of data points that form a vertical line is songs that are listed as 'N/A' on the charts, so they appear off to the side, effectively "below 0." There is many of these, and they have varying lengths, which is what the time variable measures. 
+
+## Question 10
+
+Pick any data set from data() or from the tidyverse. Using this data set, make at least
+two figures. One should be a scatterplot with a smoothed curve. The other can be whatever you
+would like, be creative!
+
+
+```{r Q10}
+#using dataset "seatbelts"
+
+seatdata <- data.frame(Seatbelts)
+#scatterplot with smooth curve for petrol price vs distance driven
+ggplot(seatdata, aes(kms, PetrolPrice))+
+ geom_point(color = "purple")+
+  geom_smooth(color = "red")
+
+#bar chart for driver deaths
+ggplot(seatdata, aes(DriversKilled))+
+  geom_bar()
+
+```

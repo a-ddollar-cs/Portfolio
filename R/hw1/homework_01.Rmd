@@ -1,0 +1,54 @@
+---
+title: "Homework 01"
+author: "Austin Dollar"
+date: "8/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dataset Description and where to find
+
+  The data set that I used for this assignment is called "AirPassengers." This is an included data set with R, inside the package 'data sets.' The AirPassengers data set records monthly air passenger numbers from the year 1949 until 1960. While a rather simple data set, it is really interesting to look at, as is gives distinct trends, which are especially visible on the included graphical representation below. 
+
+
+## Plotted Data
+
+Below is the Airpassengers data set plotted into a graphical representation: 
+
+```{r Plots}
+plot(AirPassengers)
+```
+
+This is a really interesting graph to look at, as it suggests peak travel time in the summer months, with a steady increase in overall passengers over time. 
+
+## Data Summary Statistics
+
+Below is a summary of the data contained in the AirPassengers data set. Detailed descriptions of each statistic are included below the summary:
+
+```{r Summary}
+summary(AirPassengers)
+```
+
+Above is the General Summary Statistics for the AirPassengers data set. This data shows us a lot, but the most interesting is that of the median and the mean. These values are extremely close together, relative to the overall values in the data set. This suggests to us that there is an overall even distribution of values across the measurement period, which suggests a somewhat linear trend. 
+
+```{r Std Dev}
+sd(AirPassengers)
+```
+
+Above is the Calculated Standard Deviation for this data set. The standard deviation in this case is relatively high. This tells us that our values are changing in a trend, meaning, they do not stay stagnant.
+
+```{r IQR}
+IQR(AirPassengers)
+```
+
+Above is the calculated Interquartile Range for the data. This statistic tells us that there is a steady increase in the amount of airline passengers. In fact, the increase is linear. Each quartile increases by 90. This shows us that this increase is linear, which supports the conclusion obtained during analysis of the summary statistics.   
+
+
+
+
+
+
+

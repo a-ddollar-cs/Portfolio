@@ -1,0 +1,107 @@
+---
+title: "Assignment 3"
+author: "Austin Dollar"
+date: "9/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Q1
+
+```{r Q1}
+
+p1 <- 1*0.05
+
+p2 <- 2*0.10
+
+p3 <- 3*0.10
+
+p4 <- 4*0.15
+
+p5 <- 5*0.25
+
+p6 <- 6*0.35
+
+Ex <- p1+p2+p3+p4+p5+p6
+
+
+```
+
+The expected value of X is `r Ex`
+
+
+## Q2
+
+```{r Q2}
+
+#setup normal distribution, mean, std dev
+set_mean <- 50
+set_std <- 2.7
+
+#calculation for one std deviation away and 68%
+one_dev <- set_mean + set_std
+type_68 <- qnorm(0.68, set_mean, set_std)
+print(type_68)
+print(one_dev)
+
+#calculation for two std dev, 95%
+two_dev <- one_dev + set_std
+type_95 <- qnorm(0.95, set_mean, set_std)
+print(type_95)
+print(two_dev)
+
+
+
+#calculation for 3 std dev, 99.7%
+three_dev <- two_dev + set_std
+type_99 <- qnorm(0.997, set_mean, set_std)
+print(type_99)
+print(three_dev)
+
+```
+
+As shown in the above code, calculating the values for the 68 percentile is the same as adding one std deviation to the mean,with room for error. The same can be said for two std deviations and the 95 percentile, as well as the 99.7 percentile and three std dev, again, with room for error. This effectively proves and justifies the 68, 95, 99 rule.
+
+
+
+## Q3
+
+```{r Q3}
+
+amean <- 67.2
+
+astd <- 3.4
+
+
+a <- pnorm(67, amean, astd)
+
+b <- pnorm(72, amean, astd) - pnorm(66, amean, astd)
+
+c <- pnorm(70.27, amean, astd, lower.tail = FALSE)
+
+d <- qnorm(0.1375, amean, astd)
+
+```
+
+A. The probability a randomly selected adult is less than 67 inches tall is `r a`
+
+B. The probability a randomly selected an adult is between 66 and 72 inches tall is `r b`
+
+C. The probability a randomly selected adult is greater than 70.27 inches tall is `r c`
+
+D. The shortest 13.75% of adults are below `r d`
+
+
+
+
+## Q4
+
+Question 4 is completed in the other document included in the submission.
+
+
+

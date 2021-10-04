@@ -1,0 +1,379 @@
+---
+title: "Assignment 1"
+author: "Austin Dollar"
+date: "9/7/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rlist)
+```
+
+## Question 1
+
+
+```{r Q1}
+
+#func definition
+
+sum_mults <- function(nums, n)
+{
+  f <- 0
+  
+  for(x in 1:n-1)
+  {
+    for(i in nums)
+    {
+
+      if(x %% i == 0)
+      {
+        f <- f+x
+        break
+      }
+       
+    }
+  }
+  return(f)
+  
+}
+
+#test function
+Q1_1<- sum_mults(c(3,5), 30)
+Q1_2<- sum_mults(c(2,8), 40)
+Q1_3<- sum_mults(c(4,6), 50)
+
+
+```
+
+Test of sum_mults(c(3,5), 30) = `r Q1_1`
+
+Test of sum_mults(c(2,8), 40) = `r Q1_2`
+
+Test of sum_mults(c(4,6), 50) = `r Q1_3`
+
+
+
+## Question 2
+
+
+```{r Q2}
+
+collatz_len <- function(n)
+{
+  t <-0
+  
+  while(n > 1)
+  {
+    if (n%%2 == 0)
+    {
+      
+      n = n/2
+      t = t+1
+      
+    }else
+    {
+      n = 3*n+1
+      t = t+1
+    }
+    
+  }
+  
+  t = t+1
+  
+  return(t)
+  
+}
+
+
+collat_1 <- collatz_len(17)
+collat_2 <- collatz_len(15)
+collat_3 <- collatz_len(21)
+
+
+```
+
+Test of collatz_len(17) = `r collat_1`
+
+Test of collatz_len(15) = `r collat_2`
+
+Test of collatz_len(21) = `r collat_3`
+
+
+## Question 3
+
+
+```{r Q3}
+
+reverse<- function(v)
+{
+  return(rev(v))
+}
+
+reversal_1 <- reverse(c(1,2,3))
+reversal_2 <- reverse(c(2,2,3))
+reversal_3 <- reverse(c(4,5,6))
+
+```
+
+Test of reverse(c(1,2,3)) = `r reversal_1`
+
+Test of reverse(c(2,2,3)) = `r reversal_2`
+
+Test of reverse(c(4,5,6)) = `r reversal_3`
+
+
+## Question 4
+
+
+```{r Q4}
+
+drop <- function(v, n)
+{
+  c <- 0
+  
+  v1 <- character()
+  
+  for(i in v)
+  {
+    c <- c + 1
+    
+    if(c == n)
+    {
+      v1 <- c(v1, v[i])
+      
+      c = 0
+    }
+  }
+  
+  v <- setdiff(v, v1)
+  return(v)
+}
+
+
+dropper_1 <- drop(c(1,2,3,4,5), 2)
+dropper_2 <- drop(c(1,2,3,4,5), 4)
+dropper_3 <- drop(c(1,2,3,4,5), 3)
+
+```
+
+Test of drop(c(1,2,3,4,5), 2) = `r dropper_1`
+
+Test of drop(c(1,2,3,4,5), 4) = `r dropper_2`
+
+Test of drop(c(1,2,3,4,5), 3) = `r dropper_3`
+
+
+## Question 5
+
+
+```{r Q5}
+
+intersect_3 <- function(v, w, x)
+{
+  v1 <- intersect(v,w)
+  v1 <- intersect(v1, x)
+  
+  return(v1)
+  
+}
+
+inter <- intersect_3(c(1,2,3,1), c(1,1,3,2), c(3,1,9,1))
+inter_1 <- intersect_3(c(1,2,3), c(3,4,5), c(1,2,3,4))
+inter_2 <- intersect_3(c(4,5,6,7), c(3,4,5), c(5,7,8))
+
+```
+
+Test of intersect_3(c(1,2,3,1), c(1,1,3,2), c(3,1,9,1)) = `r inter`
+
+Test of intersect_3(c(1,2,3), c(3,4,5), c(1,2,3,4)) = `r inter_1`
+
+Test of intersect_3(c(4,5,6,7), c(3,4,5), c(5,7,8)) = `r inter_2`
+
+
+## Question 6
+
+
+```{r Q6}
+
+filter_vec <- function(v,p)
+{
+  v1 <- integer()
+  
+  for (i in v)
+  {
+    if(p(v[i]) == TRUE)
+    {
+      v1 <- c(v1, v[i])
+    }
+  }
+  
+  return(v1)
+}
+
+p <- function(x){return(x>3)}
+l <- 1:6
+m <- filter_vec(l,p)
+
+
+
+```
+
+Test of filter_vec(l,p) = `r m`
+
+## Question 7
+
+
+```{r Q7}
+
+n_fibs <- function(n)
+{
+  v <- integer()
+  
+  for(i in 1:n)
+  {
+    if(i == 1 | i == 2)
+    {
+      
+      v <- c(v, 1)
+      
+    }else
+    {
+      cur <- v[i-1] + v[i-2]
+      v <- c(v, cur)
+      
+    }
+    
+  }
+  
+  return(v)
+}
+
+fib <- n_fibs(2)
+fib_1 <- n_fibs(3)
+fib_2 <- n_fibs(8)
+
+```
+
+Test of n_fibs(2) = `r fib`
+
+Test of n_fibs(3) = `r fib_1`
+
+Test of n_fibs(8) = `r fib_2`
+
+
+## Question 8
+
+
+```{r Q8}
+
+shift <- function(v,n)
+{
+
+  if (n == 0)
+  {
+    
+    return(v)
+    
+  }else if(n > 0)
+    {
+      return(c(tail(v, -n), head(v, n)))
+  }
+  else
+  {
+    return(c(tail(v, n), head(v, -n)))
+  }
+  
+  
+}
+
+shifter1 <- shift(c(1,2,3,4), 2)
+shifter2 <- shift(c(1,2,3,4), -3)
+shifter3 <- shift(c(1,2,3,4), -1)
+
+```
+
+Test of shift(c(1,2,3,4), 2) = `r shifter1`
+
+Test of shift(c(1,2,3,4), -3) = `r shifter2`
+
+Test of shift(c(1,2,3,4), -1) = `r shifter3`
+
+
+## Question 9
+
+
+```{r Q9}
+
+rem_consec_dups <- function(v)
+{
+  v1 = integer()
+  k <- 99999
+  
+  for(i in 1:length(v))
+  {
+    if(v[i] != k)
+    {
+      v1 <- c(v1, v[i])
+    }
+    
+    k <- v[i] 
+  }
+  return(v1)
+}
+
+remmer <- rem_consec_dups(c(1,1,1,2,3,3,1,2,2))
+remmer_1 <- rem_consec_dups(c(1,1,1,2,3,3,1,2,2))
+remmer_2 <- rem_consec_dups(c(1,1,1,2,3,3,1,2,2))
+
+```
+
+Test of rem_consec_dups(c(1,1,1,2,3,3,1,2,2)) = `r remmer`
+
+Test of rem_consec_dups(c(11,2,2,3,3,1,2)) = `r remmer_1`
+
+Test of rem_consec_dups(c(1,1,1,2,3,3,1,2,24,5,5,6,6,6,7)) = `r remmer_2`
+
+
+## Question 10
+
+
+```{r Q10}
+
+n_even_fibs <- function(n)
+{
+  v <- integer()
+  
+  for(i in 1:30)
+  {
+    if(i == 1 | i == 2)
+    {
+      
+      v <- c(v, 1)
+      
+    }else
+    {
+      cur <- v[i-1] + v[i-2]
+      v <- c(v, cur)
+      
+    }
+    
+  }
+  
+  fiblist <- list(name = 1)
+  
+for(x in 1:length(v))
+{
+  if(v[x] %% 2 == 0)
+  {
+    zz = as.character(x)
+    list.append(fiblist, zz = v[x])
+  }
+}
+  print(fiblist)
+}
+
+efibs <- n_even_fibs(5)
+
+```
+

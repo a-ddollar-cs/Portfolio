@@ -1,0 +1,46 @@
+---
+title: "Homework 4"
+author: "Austin Dollar"
+date: "9/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+The written out answer to question 1 is included in the scanned pdf attached in the homework submission
+
+
+## Question 2
+
+Generate data from the gamma distribution Γ(shape = 3, rate = 6), and then use optim to estimate shape and rate via the log-likelihood function for the gamma
+distribution. Note that you can use the log-likelihood function you found as part of
+problem 1.
+
+```{r Q2}
+
+ll.gamma <- function(theta, x){
+  
+  a <- theta[1]
+  B <- theta[2]
+  n <- length(x)
+  
+    (n*log(B))-(n*log(gamma(a)))+(a-1)*sum(log(x)) - sum(B*x)
+    
+    
+} 
+
+data <- rgamma(1e5, shape = 3, rate = 6)
+
+
+optim(par=c(7,6), fn=ll.gamma, method="L-BFGS-B", lower=c(1e-6,1e-6),control=list(fnscale=-1), 
+      x = data)
+
+```
+
+As you can see above, optim returns the expected value for the rate, as par = 6 as well as the shape, whereas par = 3. 
+
+
