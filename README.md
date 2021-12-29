@@ -14,6 +14,5 @@ Above is a link to my Capstone project, in which I individually designed, implem
 
 Additional projects include projects with security using NetCat, Ghidra, Zenmap, etc, as well as a Mobile Application done in Flutter, with the repo available upon request.
 
-Currently working on predictive data modeling projects in R, as well as Parallel/HPC computing projects. They will be added to the portfolio upon completion, in progress code can be sent upon request as well.
 
 
