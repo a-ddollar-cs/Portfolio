@@ -1,0 +1,378 @@
+---
+title: "Project 2"
+author: "Austin Dollar"
+date: "11/15/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE,}
+knitr::opts_chunk$set(comment = NA, echo=TRUE, message = FALSE, warning = FALSE)
+
+#library loads
+library(tidyverse)
+library(gridExtra)
+library(modelr)
+library(caret)
+set.seed(12345)
+
+
+#read in csv files for each year
+Ida20<- read_csv("Ida2020.csv")
+Ida19<- read_csv("Ida2019.csv")
+Ida18<- read_csv("Ida2018.csv")
+Ida17<- read_csv("Ida2017.csv")
+Ida16<- read_csv("Ida2016.csv")
+Ida15<- read_csv("Ida2015.csv")
+```
+
+# Introduction and Domain
+
+The data set I chose for this project is the deer Harvest Statistics for the State of Idaho, with data able to
+be obtained for the 2001-2020 deer seasons. This data keeps track of each individual Zone, or area of the
+state, called units, the amount of hunters hunting in any given year, the amount of successful harvests, among other data
+statistics for hunting such as harvest animal size. In terms of past studies, there has been studies on the
+deer hers themselves, but there has been little in regards to the context of hunting, which is important. It
+is important as these statistics can help us identify the overall trends of human and hunter impact on the
+deer population of Idaho can be gauged and predicted within the contexts of hunting, showing us things
+such as a trend in the amount of hunters, the amount of harvests, the hunt success rate, among other pieces
+of information that can help us predict trends in hunting overall, and how the quality and amount of deer
+harvested are affected over time. I am interested in this as I am a passionate hunter here in California,
+however, the data regarding California is only available in a PDF format, so I was forced to use data from
+Idaho, which was offered in a csv format.
+
+
+# Data Set 
+
+We will be using the Idaho data set available at
+
+https://idfg.idaho.gov/ifwis/huntplanner/stats/.
+
+The Idaho Data sets are broken up by year, in this case, we are utilizing the years 2015- 2020, which are to to be merged below in the "Tidy Data" section. The variables, as read in, however, are included below:
+
+• Take.Method - The method use to take/harvest the deer; categorical variable of the following categories,
+which are sorted by their respective seasons: Any Weapon = General Season, can use any method
+of take, Archery = Archery Weapon only season, Muzzleloader = Muzzleloader only season, All
+Weapons Combined = Combine all seasons for a total.
+
+• Unit - A categorical variable that describes the “Unit” in which the hunter was hunting and/or the
+deer was harvested. A Map of respective units is included in the following link:
+
+https://fishandgame.idaho.gov/ifwis/portal/sites/ifwis/files/maps/2014_RegionsAndGMUs_8.5x11.png 
+
+• Harvest - Numerical Variable that gives the number of harvested deer in the observation.
+
+• Hunters - Numerical variable that gives the amount of hunters in an observation.
+
+• Success% - Numerical variable for the percent harvest success for the observation.
+
+• Days - Numerical variable for total days hunted in the observation.
+
+• Antlered - Numerical variable for antlered deer harvested in the observation.
+
+• Antlerless - Numerical variable for antlerless deer harvested in the observation.
+
+• %4+Pts - Numerical Variable for the percentage of harvested deer with greater than or equal to 4 points on the antlers.
+
+• %5+Pts - Numerical Variable for the percentage of harvested deer with greater than or equal to 5 points on the antlers.
+
+• %Whitetail - Numerical Variable for the percentage of harvested deer that are Whitetail (rather than
+Mule deer)
+
+### Tidying data
+
+```{r tidy, echo=FALSE}
+
+#add year column
+Ida20 <- Ida20 %>% mutate(Year = 2020)
+Ida19 <- Ida19 %>% mutate(Year = 2019)
+Ida18 <- Ida18 %>% mutate(Year = 2018)
+Ida17 <- Ida17 %>% mutate(Year = 2017)
+Ida16 <- Ida16 %>% mutate(Year = 2016)
+Ida15 <- Ida15 %>% mutate(Year = 2015)
+
+#merge together to create idaho
+Idaho <- bind_rows(Ida20,Ida19,Ida18,Ida17,Ida16,Ida15)
+
+#add region
+Idaho <- Idaho %>% mutate(Region = "Unkown")
+
+for(i in 1:nrow(Idaho))
+{
+  if(Idaho$Unit[i] == "1" | Idaho$Unit[i] == "2" | Idaho$Unit[i] == "4A" | Idaho$Unit[i] == "3" | Idaho$Unit[i] == "4"|Idaho$Unit[i] == "5" | Idaho$Unit[i] == "6" | Idaho$Unit[i] == "9" | Idaho$Unit[i] == "7")
+  {
+    Idaho$Region[i] = "Panhandle"
+  }
+  else if (Idaho$Unit[i] == "8" | Idaho$Unit[i] == "8A" |Idaho$Unit[i] == "10A" |Idaho$Unit[i] == "10" |Idaho$Unit[i] == "11" |Idaho$Unit[i] == "11A" |Idaho$Unit[i] == "16" |Idaho$Unit[i] == "12" |Idaho$Unit[i] == "13" |Idaho$Unit[i] == "18" |Idaho$Unit[i] == "14" |Idaho$Unit[i] == "15" |Idaho$Unit[i] == "19" |Idaho$Unit[i] == "16A" |Idaho$Unit[i] == "17" |Idaho$Unit[i] == "20")
+  {
+    Idaho$Region[i] = "Clearwater"
+  }
+  else if(Idaho$Unit[i] == "42" | Idaho$Unit[i] == "41" | Idaho$Unit[i] == "40" | Idaho$Unit[i] == "38" |Idaho$Unit[i] == "39" |Idaho$Unit[i] == "35" |Idaho$Unit[i] == "33" |Idaho$Unit[i] == "34" |Idaho$Unit[i] == "32" | Idaho$Unit[i] == "31" | Idaho$Unit[i] == "22" |Idaho$Unit[i] == "23" |Idaho$Unit[i] == "19A" |Idaho$Unit[i] == "20A" |Idaho$Unit[i] == "26" |Idaho$Unit[i] == "25" |Idaho$Unit[i] == "24" |Idaho$Unit[i] == "32A")
+  {
+    Idaho$Region[i] = "Southwest"
+  }
+  else if(Idaho$Unit[i] == "21" | Idaho$Unit[i] == "21A" |Idaho$Unit[i] == "28" |Idaho$Unit[i] == "27" |Idaho$Unit[i] == "30" | Idaho$Unit[i] == "30A" | Idaho$Unit[i] == "29" |Idaho$Unit[i] == "37A" |Idaho$Unit[i] == "36B"| Idaho$Unit[i] == "37" | Idaho$Unit[i] == "36" |Idaho$Unit[i] == "36A")
+  {
+    Idaho$Region[i] = "Salmon"
+  }
+  else if(Idaho$Unit[i] == "56" |Idaho$Unit[i] == "52A" |Idaho$Unit[i] == "49" |Idaho$Unit[i] == "48" |Idaho$Unit[i] == "43" |Idaho$Unit[i] == "44" |Idaho$Unit[i] == "45" |Idaho$Unit[i] == "46" |Idaho$Unit[i] == "47" |Idaho$Unit[i] == "54" |Idaho$Unit[i] == "55" |Idaho$Unit[i] == "57" |Idaho$Unit[i] == "52" |Idaho$Unit[i] == "53" )
+  {
+    Idaho$Region[i] = "Magic Valley"
+  }
+  else if(Idaho$Unit[i] == "50" |Idaho$Unit[i] == "63" |Idaho$Unit[i] == "69" |Idaho$Unit[i] == "66" |Idaho$Unit[i] == "67" |Idaho$Unit[i] == "65" |Idaho$Unit[i] == "62" |Idaho$Unit[i] == "62A" |Idaho$Unit[i] == "61" |Idaho$Unit[i] == "59" |Idaho$Unit[i] == "59A" |Idaho$Unit[i] == "58" |Idaho$Unit[i] == "51" |Idaho$Unit[i] == "60" |Idaho$Unit[i] == "60A" |Idaho$Unit[i] == "63A" |Idaho$Unit[i] == "64")
+  {
+    Idaho$Region[i] = "Upper Snake"
+  }
+  else if(Idaho$Unit[i] == "68" |Idaho$Unit[i] == "68A" |Idaho$Unit[i] == "73A" |Idaho$Unit[i] == "73" |Idaho$Unit[i] == "77" |Idaho$Unit[i] == "78" |Idaho$Unit[i] == "76" |Idaho$Unit[i] == "66A" |Idaho$Unit[i] == "72" |Idaho$Unit[i] == "71" |Idaho$Unit[i] == "70" |Idaho$Unit[i] == "74" |Idaho$Unit[i] == "75")
+  {
+    Idaho$Region[i] = "Southeast"
+  }
+}
+```
+
+Due to the fact that these Data sets are in different files, we have to do some merging and tidying. I merged all the data sets for the years 2015-2020 by adding a variable called "year" to the data set before the merge. Additionally, due to the difficulty in sorting out the 60 plus Units of the state, I divided it into larger regions, which is another variable I added. A link to the image used to map these units to regions is included in the link below:
+
+https://fishandgame.idaho.gov/ifwis/portal/sites/ifwis/files/maps/2014_RegionsAndGMUs_8.5x11.png
+
+These new variables, added to the new Idaho dataset are included below:
+
+• Year - Numerical Variable for the year the data was recorded
+
+• Region - Categorical variable for region to consolidate units
+
+
+# Goal and Data Science Question
+
+We will be exploring the Idaho data set in an effort to better understand the overall trends in different areas
+of hunting. This data comes directly from the department of Fish and Game in the state of Idaho, which
+can be obtained at he following link:
+
+https://idfg.idaho.gov/ifwis/huntplanner/stats/
+
+The link above links to the statistics for the 2020 season, the data for the years 2001-2020 can be seen and
+downloaded via clicking the “Deer” tab on the website, with the datasets I am using being listed under
+“General Season.” 
+This data seems to be reliable, coming from a government source, with its only possible source of fault, is that it does not account for poachers, as that would be an unreported statistic, as it is illegal. So while my results will ring true for legal hunters, it does not account for criminal activity.
+
+I combined the data for the years 2015 to 2020 to one larger data set, to help better model trends over time, and if this five year time span is not enough to obtain a reliable model, I will continually add years until an accurate model can be obtained.
+
+The three main data science questions that seem the most interesting and that can be addressed with this data are as follows:
+
+1. Does “Average days hunted” contribute to and/or correlate with, hunter success, and what does it tell
+us?
+
+2. Can we predict the trend (and is there a trend) in overall harvested deer antler size over time? IE; Is
+the percentage of pts greater than 4 and greater than 5 trending in an obvious direction?
+
+3. How does the total amount of deer harvested trend over time, and what are the contributing factors
+of this result?
+
+
+The main question that I will focus on for this project, and attempt to model is the second question, which, again, is as follows:
+
+Can we predict the trend (and is there a trend) in overall harvested deer antler size over time? IE; Is the percentage of pts greater than 4 and greater than 5 trending in an obvious direction?
+
+This question is going to be my focus, as I believe that in answering it, we must also answer question three, as it has relevant data in this situation. Overall, this model's parameters should make sense, showing a trend in deer size over time. This is because the metrics of percent greater than 4 pts, and percent greater than 5 points are a metric that represents overall deer health. As healthy, mature deer will have more points on their antlers, therefore measuring this metric is a decent way to measure overall health.The one point of confusion, however may be what that percentage means, which is why solving for trends in total population will be a good supplement in an attempt to better explain the results. Possible limitations, as stated before, could be the amount of data we have does not have enough information for an accurate model. However, this can be remedied by obtaining and merging more years into our data set. 
+
+
+# Visual Representation of the relevant data (pre model)
+
+For our data science question, there are three main graphs that we would be interested in looking at, which is the trend in total deer harvests over time, as well as the trend in the percentage of those deer that have greater than 4 points on their antlers, and greater than 5 points respectively. Additionally, the graphs will be broken up by region, which will tell us if trends are localized to certain areas, or spread throughout the entire state. These graphs are included below, in order to give a visual representation of the data to be modeled. 
+
+```{r visual, echo=FALSE}
+
+#create dataset of total harvest (only all weapons combined)
+All_wep <- filter(Idaho, `Take Method` == "All Weapons Combined" )
+
+#plot total harvest as a baseline
+Harvest_plot<- ggplot(All_wep, aes(x = Year, y = Harvest))+
+  geom_point()+
+  geom_smooth()+
+  facet_wrap(~Region)
+
+#plot percentage of total harvest that are 4 points or greater (meaning pretty big)
+Perc4_plot<- ggplot(All_wep, aes(x = Year, y = `%4+Pts`))+
+  geom_point()+
+  geom_smooth()+
+  facet_wrap(~Region)
+
+#plot percentage of total harvest that are 4 points or greater (meaning quite large)
+Perc5_plot<- ggplot(All_wep, aes(x = Year, y = `%5+Pts`))+
+  geom_point()+
+  geom_smooth()+
+  facet_wrap(~Region)
+
+
+```
+
+Before models are generated, here is a visual representation of what the key data relationships in this data set look like. We have graphs representing the trend in the total harvests over time as a baseline to then look at the percentage of those totals that have 4 antler points or greater, then likewise, the same for 5 or more antler points:
+
+
+### Graph of total harvests over time, sorted by region
+
+```{r Harvest, echo = FALSE}
+
+Harvest_plot
+
+```
+
+
+
+### Graph of percent greater than 4 points (%4+Pts) over time, sorted by region
+
+```{r Perc4, echo = FALSE}
+
+Perc4_plot
+
+```
+
+### Graph of percent greater than 5 points (%5+Pts) over time, sorted by region
+
+```{r Perc5, echo = FALSE}
+
+Perc5_plot
+
+```
+
+
+
+# Model Generation and conclusions
+
+```{r modelSetup, echo = FALSE}
+
+#get 80% of rows
+train_rows <- as.vector(createDataPartition(Idaho$Unit, p = 0.8, list = FALSE))
+
+#create test and train sets
+testSet <- Idaho[-train_rows, ]
+trainSet <- Idaho[train_rows, ]
+
+```
+
+To generate the model, I will generate the model on the entire deer population, rather than breaking it into regions, as that will be too many models. Creating one general model for the whole state in general will map data well enough to generally fit and predict individual regions as well. Below, I will generate models of the two main points of prediction, %4+Pts and %5+Pts, using an 80% training set, and a 20% testing set. Both of these metrics will give us an idea of the overall health of the Idaho deer herds, as the amount of antlers is largely an indicator of health. While there is much more nuance in reality, for the sake of this project, we can say that the percentage of harvested deer that have 4 points or greater is an indicator of the percentage of the deer herd that can be deemed at least "healthy". Likewise, the statistic that measures a greater hurdle, the percentage of deer with 5 or greater points, correlates to the percentage of deer that can be deemed "very healthy."
+
+### Model generation of the %4+Pts variable
+
+```{r 4plusModel, echo = FALSE}
+
+#temporarily rename column for syntax
+tempIda <- rename(trainSet, perc4 = '%4+Pts')
+
+
+#generate model
+model4 <- lm(perc4 ~ Region + Hunters+ Year+`Take Method`+Unit, data = tempIda)
+
+#remove tempIda
+rm(tempIda)
+
+#add predictions
+predictions4 <- add_predictions(testSet, model4)
+
+#plot true value to predicted value
+ggplot(predictions4, aes(x=`%4+Pts`, y = pred))+
+geom_point()+
+  geom_smooth()
+
+
+```
+
+Above, we have a plot of the true values of the test set on the x axis, with the correlated predicted value on the y axis. From looking at the graph, we can determine that it is pretty accurate, as the general graphical trend is 1:1 linear, with a slight curve to it, meaning that the predicted value and true value are, generally speaking, the same. We can see that there is a lot of points at 0 and 100%, which is as expected, as these are percentages. Next, we will add residuals and plot them to ensure our model is as accurate as possible.
+
+```{r residuals4, echo = FALSE}
+
+#rename for testing
+tempIda4 <- rename(testSet, perc4 = '%4+Pts')
+
+#add residuals
+resids4 <- add_residuals(tempIda4, model4)
+
+#remove tempida and fix name
+resids4 <- rename(resids4, '%4+Pts'=perc4)
+
+#add residual plots
+ggplot(data = resids4, mapping = aes(resid)) +
+geom_density()
+
+```
+
+Our graphical representation of residuals, shown above, is as good as I could get it. However, my density is really good, as it is normally distributed, centered around zero. This gives us really good results, even though the model became more complicated than anticipated, as it requires more data than just the year. In order to accurately predict the amount of deer that have 4 or greater points, we will not only need the year, but the Region, amount of Hunters, Take Method, and Unit as well. These values are actually changeable by the government, which controls the amount of hunting permits allotted for specific regions. Using this data, one could find the ideal amount of permits to give out in different regions to best maintain a healthy deer population. We can look at the predictions of the test set as a representation of a trend over time, shown below:
+
+```{r pred4graph, echo = FALSE}
+
+ggplot(predictions4, aes(x=Year, y = pred))+
+geom_point()+
+  geom_smooth()+
+  facet_wrap(~Region)
+
+Perc4_plot
+
+```
+
+When observing these graphs, sorted by region, the trends are overall pretty much the same as the graph of the test data set, with some minimal differences. You can tell this by comparing the two above graphs, with the graph of predictions above the graph of the entire data set.The key is that the overall trend is the same, which is exactly what we want, as it says that the predictive model is accurate to the test data that we have. In the next section, we will use the same methods and variables to generate and test a model for the greater barrier, deer that have 5 or greater points, that can be deemed "very healthy."
+
+### Model generation of the %5+Pts variable
+
+```{r 5plusModel, echo = FALSE}
+
+#temporarily rename column for syntax
+tempIdaV <- rename(trainSet, perc5 = '%5+Pts')
+
+
+#generate model
+model5 <- lm(perc5 ~ Region + Hunters+ Year+`Take Method`+Unit, data = tempIdaV)
+
+#remove tempIda
+rm(tempIda)
+
+#add predictions
+predictions5 <- add_predictions(testSet, model5)
+
+#plot true value to predicted value
+ggplot(predictions5, aes(x=`%5+Pts`, y = pred))+
+geom_point()+
+  geom_smooth()
+
+
+```
+
+Above, we have a plot of the true values of the test set on the x axis, with the correlated predicted value on the y axis. From looking at the graph, we can determine that it is pretty accurate, as the general graphical trend is 1:1 linear, with a slight curve to it, meaning that the predicted value and true value are, generally speaking, the same. We can see that there is a lot of points at 0 and 100%, which is as expected, as these are percentages. Next, we will add residuals and plot them to ensure our model is as accurate as possible.
+
+```{r residuals5, echo = FALSE}
+
+#rename for testing
+tempIda5 <- rename(testSet, perc5 = '%5+Pts')
+
+#add residuals
+resids5 <- add_residuals(tempIda5, model5)
+
+#remove tempida and fix name
+resids5 <- rename(resids5, '%5+Pts'=perc5)
+
+#add residual plots
+ggplot(data = resids5, mapping = aes(resid)) +
+geom_density()
+
+
+```
+
+Our graphical representation of residuals, shown above, is as good as I could get it. The graph is relatively normally distributed, but has some skew due to the amount of values concentrated close to zero. The model became more complicated than anticipated, however, as it requires more data than just the year. In order to accurately predict the amount of deer that have 5 or greater points, we will not only need the year, but the Region, amount of Hunters, Take Method, and Unit as well. These values are actually changeable by the government, which controls the amount of hunting permits allotted for specific regions. Using this data, one could find the ideal amount of permits to give out in different regions to best maintain a healthy deer population. We can look at the predictions of the test set as a representation of a trend over time, shown below:
+
+```{r pred5graph, echo = FALSE}
+
+ggplot(predictions5, aes(x=Year, y = pred))+
+geom_point()+
+  geom_smooth()+
+  facet_wrap(~Region)
+
+Perc5_plot
+
+```
+
+When observing these graphs, sorted by region, the trends are overall pretty much the same as the graph of the test data set, with some minimal differences. You can tell this by comparing the two above graphs, with the graph of predictions above the graph of the entire data set. The key is that the overall trend is the same, which is exactly what we want, as it says that the predictive model is accurate to the test data that we have. Overall, both the 4 Point and 5 Point Models are pretty accurate, and these models can be used to predict the health of the deer population for future years.
+
+
+# Social and Ethical Ramifications
+
+This data and predictive model has little Social Ramifications due to its scientific nature, however, it has great Ethical and even Environmental Ramifications. By having a predictive model that can anticipate the health of the overall deer herd, depending on the year and amount of hunters, as well as the method they use for hunting, both in total and per region, we can actually help keep the deer herds healthy. The government agencies that grant these permits can use the model to anticipate the amount of permits that they should allow in order to maintain a healthy, or even very healthy deer herd. Ethically and environmentally speaking, it will allow Idaho officials to help keep a healthy deer herd for generations to come.
+
+
+
