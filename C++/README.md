@@ -19,3 +19,5 @@ Analysis of Sorts - Analyzing and compasisoon of sorting algorithims
 Hash Table - Implementation of a Hash Table
 
 Min Priority queue - Implementation of a Min Priotity Queue
+
+HPC - A subdirectory of projects done involving parallel/numeric programming and High Performance Computing.
