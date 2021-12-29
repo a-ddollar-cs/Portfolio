@@ -12,6 +12,8 @@ A collection of my projects and code from Chico State, as well as design work to
 ## [Capstone Project](https://github.com/a-ddollar-cs/Capstone)
 Above is a link to my Capstone project, in which I individually designed, implemented, and coded a Dart/Flutter android app.
 
+## [R](https://github.com/a-ddollar-cs/Portfolio/tree/main/R)
+
 Additional projects include projects with security using NetCat, Ghidra, Zenmap, etc, as well as a Mobile Application done in Flutter, with the repo available upon request.
 
 
