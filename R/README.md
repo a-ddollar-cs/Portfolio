@@ -1,2 +1,1 @@
-# A collection of projects and homework assignments in R, including data science/analytics and prediction models, as well as statistics (in progress)
-
+# A collection of projects and homework assignments in R, including data science/analytics and prediction models, as well as statistics. The biggest project I have completed in R thus far involving prediction models and linear regression, is included in the directory labeled "Project"
